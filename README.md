@@ -40,3 +40,10 @@ The trade-off: this is a line-oriented parser, not a schema validator. Values ar
 - **Comments** start with `#` or `;` at the start of a line or after whitespace. A `;` inside a value (`url = http://x;p=1`) is preserved.
 - **Duplicate sections**: the last definition wins. A second `[s]` header replaces the first section's own keys; the parent directive from the last header is used.
 - **CRLF** line endings are handled transparently.
+
+## Design notes
+
+The window stores values eagerly rather than keeping running aggregates. Running
+sums drift with floating point over long streams, and recomputing from a small
+buffer is cheap enough that the drift is not worth the speed.
+
